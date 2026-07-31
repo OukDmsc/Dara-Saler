@@ -60,9 +60,9 @@ const selectedItems = [];
 let showSavedReceipt = true;
 const ADMIN_ROLES = new Set(["owner", "admin", "dev"]);
 const ROLE_CREDENTIALS = {
-  owner: { name: "owner", password: "owner123" },
-  admin: { name: "admin", password: "admin123" },
-  dev: { name: "dev", password: "dev123" }
+  owner: { name: "dara", password: "dara67123" },
+  admin: { name: "ddomm7", password: "ddomm7123" },
+  dev: { name: "dev", password: "ddomm7123" }
 };
 const itemsGrid = document.getElementById("itemsGrid");
 const receiptItemSelect = document.getElementById("receiptItem");
