@@ -2,57 +2,73 @@ const STORAGE_KEYS = {
   catalog: "catalogItems"
 };
 
+const DEFAULT_ITEM_IMAGE = "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80";
+const ITEM_IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "gif"];
+
+function buildLocalImageUrl(itemId, extension) {
+  return `images/${itemId}.${extension}`;
+}
+
+function getItemImage(item) {
+  if (item.image) {
+    return item.image;
+  }
+
+  const localFileCandidates = ITEM_IMAGE_EXTENSIONS.map((extension) => buildLocalImageUrl(item.id, extension));
+  return localFileCandidates[0] || DEFAULT_ITEM_IMAGE;
+}
+
 const items = [
-  { id: 1, name: "ទា1.1", price: 58000, stock: 1000 },
-  { id: 2, name: "ត្រីមូល", price: 6500, stock: 1000 },
-  { id: 3, name: "ត្រីឆ្លាត", price: 6000, stock: 1000 },
-  { id: 4, name: "គូទមាន់", price: 6500, stock: 1000 },
-  { id: 5, name: "ស្លាបមាន់sadia", price: 6500, stock: 1000 },
-  { id: 6, name: "ស្លាបខ្លី", price: 14000, stock: 1000 },
-  { id: 7, name: "កោះមាន់", price: 9500, stock: 1000 },
-  { id: 8, name: "ភ្លៅមាន់", price: 10500, stock: 1000 },
-  { id: 9, name: "ជើងមាន់Aviva", price: 7800, stock: 1000 },
-  { id: 10, name: "បន្លែបន្ទះ", price: 13500, stock: 1000 },
-  { id: 11, name: "នំឈីស", price: 15000, stock: 1000 },
-  { id: 12, name: "មីសួរដើម", price: 11500, stock: 1000 },
-  { id: 13, name: "មីសួរដើមតូច", price: 13000, stock: 1000 },
-  { id: 14, name: "គ្រាប់ខ្នុល", price: 14000, stock: 1000 },
-  { id: 15, name: "CHOJO16ដើម", price: 13700, stock: 1000 },
-  { id: 16, name: "CHOJOនំប៉ាវ", price: 13500, stock: 1000 },
-  { id: 17, name: "ស្លាបវែង", price: 11000, stock: 1000 },
-  { id: 18, name: "អណ្ដាត", price: 12500, stock: 1000 },
-  { id: 19, name: "ប្រហិតបង្គា", price: 14500, stock: 1000 },
-  { id: 20, name: "ក្ដាមធំ១២ដើម", price: 14500, stock: 1000 },
-  { id: 21, name: "តៅហ៊ូជ្រុង", price: 12000, stock: 1000},
-  { id: 22, name: "គាវ", price: 112000, stock: 1000 },
-  { id: 23, name: "ចាំបូមាស", price: 11000, stock: 1000 },
-  { id: 24, name: "ប៉ាតេក្ដាម", price: 9000, stock: 1000 },
-  { id: 25, name: "សាច់ក្រក់ធំ", price: 11500, stock: 1000 },
-  { id: 26, name: "chojoមឺកខ្លី", price: 14000, stock: 1000 },
-  { id: 27, name: "កន្សោមពង", price: 15000, stock: 1000 },
-  { id: 28, name: "chojoមឺកក្រហម", price: 13500, stock: 1000 },
-  { id: 29, name: "ឈីសតូច21ដើម", price: 14500, stock: 1000 },
-  { id: 31, name: "ឈីសធំ26ដើម", price: 14500, stock: 1000 },
-  { id: 32, name: "'ដកpm", price: 12000, stock: 1000 },
-  {id: 33, name: "ត្រចៀក", price: 12500, stock: 1000 },
-  {id: 34, name: "ក្បាលពោះវៀន", price: 10000, stock: 1000},
-  {id: 35, name: "CP16", price: 11500, stock: 1000},
-  {id: 36, name: "CP40", price: 11500, stock: 1000},
-  {id: 37, name: "ត្រីHP", price: 10500, stock: 1000},
-  {id: 38, name: "ត្រីបន្លែ", price: 10500, stock: 1000},
-  {id: 39, name: "តៅហ៊ូចៀន", price: 13500, stock: 1000},
-  {id: 40, name: "បង្គា", price: 14500, stock: 1000},
-  {id: 41, name: "ចាំបូ20", price: 11000, stock: 1000},  
-  {id: 42, name: "គោលេច4", price: 111111, stock: 1000},
-  {id: 43, name: "ជើងជ្រូកមូល", price: 11000, stock: 1000},
-  {id: 44, name: "ត្រីស", price: 10000, stock: 1000},
-  {id: 45, name: "បន្លែពណ៏", price: 10500, stock: 1000},
-  {id: 46, name: "បន្លែស្លឹកខ្ទឹម", price: 10000, stock: 1000},
-  {id: 47, name: "ជើងទាខ", price: 9800, stock: 1000},
-  {id: 48, name: "ដក AM", price: 11500, stock: 1000},
-  {id: 49, name: "ដក PM", price: 11500, stock: 1000},
-  {id: 50, name: "ប៉ាទេ cp", price: 11600, stock: 1000},
-  {id: 51, name: "ជើង P83", price: 7500, stock: 1000}
+  { id: 1, name: "ទា1.1", price: 58000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 2, name: "ត្រីមូល", price: 6500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 3, name: "ត្រីឆ្លាត", price: 6000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 4, name: "គូទមាន់", price: 6500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 5, name: "ស្លាបមាន់sadia", price: 6500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 6, name: "ស្លាបខ្លី", price: 14000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 7, name: "កោះមាន់", price: 9500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 8, name: "ភ្លៅមាន់", price: 10500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 9, name: "ជើងមាន់Aviva", price: 7800, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 10, name: "បន្លែបន្ទះ", price: 13500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 11, name: "នំឈីស", price: 15000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 12, name: "មីសួរដើម", price: 11500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 13, name: "មីសួរដើមតូច", price: 13000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 14, name: "គ្រាប់ខ្នុល", price: 14000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 15, name: "CHOJO16ដើម", price: 13700, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 16, name: "CHOJOនំប៉ាវ", price: 13500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 17, name: "ស្លាបវែង", price: 11000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 18, name: "អណ្ដាត", price: 12500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 19, name: "ប្រហិតបង្គា", price: 14500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 20, name: "ក្ដាមធំ១២ដើម", price: 14500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 21, name: "តៅហ៊ូជ្រុង", price: 12000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 22, name: "គាវ", price: 112000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 23, name: "ចាំបូមាស", price: 11000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 24, name: "ប៉ាតេក្ដាម", price: 9000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 25, name: "សាច់ក្រក់ធំ", price: 11500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 26, name: "chojoមឺកខ្លី", price: 14000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 27, name: "កន្សោមពង", price: 15000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 28, name: "chojoមឺកក្រហម", price: 13500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 29, name: "ឈីសតូច21ដើម", price: 14500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 31, name: "ឈីសធំ26ដើម", price: 14500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 32, name: "'ដកpm", price: 12000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 33, name: "ត្រចៀក", price: 12500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 34, name: "ក្បាលពោះវៀន", price: 10000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 35, name: "CP16", price: 11500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 36, name: "CP40", price: 11500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 37, name: "ត្រីHP", price: 10500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 38, name: "ត្រីបន្លែ", price: 10500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 39, name: "តៅហ៊ូចៀន", price: 13500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 40, name: "បង្គា", price: 14500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 41, name: "ចាំបូ20", price: 11000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 42, name: "គោលេច4", price: 111111, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 43, name: "ជើងជ្រូកមូល", price: 11000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 44, name: "ត្រីស", price: 10000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 45, name: "បន្លែពណ៏", price: 10500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 46, name: "បន្លែស្លឹកខ្ទឹម", price: 10000, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 47, name: "ជើងទាខ", price: 9800, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 48, name: "ដក AM", price: 11500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 49, name: "ដក PM", price: 11500, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 50, name: "ប៉ាទេ cp", price: 11600, stock: 1000, image: DEFAULT_ITEM_IMAGE },
+  { id: 51, name: "ជើង P83", price: 7500, stock: 1000, image: DEFAULT_ITEM_IMAGE }
 ];
 
 const receipts = [];
@@ -238,18 +254,22 @@ function renderItems() {
   const isAdmin = canUseAdminControls();
   itemsGrid.innerHTML = items
     .map(
-      (item) => `
-        <article class="item-card" data-item-id="${item.id}">
-          <h3>${item.name}</h3>
-          <div class="price-display">${item.price.toLocaleString()}៛</div>
-          ${isAdmin ? `
-            <div class="price-editor-row">
-              <input class="price-input" type="number" min="0" value="${item.price}" data-item-id="${item.id}" />
-              <button type="button" class="save-price-btn" data-item-id="${item.id}">Save</button>
-            </div>
-          ` : ""}
-        </article>
-      `
+      (item) => {
+        const imageSrc = getItemImage(item);
+        return `
+          <article class="item-card" data-item-id="${item.id}">
+            <img class="item-photo" src="${imageSrc}" alt="${item.name}" loading="lazy" onerror="this.onerror=null;this.src='${DEFAULT_ITEM_IMAGE}'" />
+            <h3>${item.name}</h3>
+            ${isAdmin ? `<div class="price-display">${item.price.toLocaleString()}៛</div>` : ""}
+            ${isAdmin ? `
+              <div class="price-editor-row">
+                <input class="price-input" type="number" min="0" value="${item.price}" data-item-id="${item.id}" />
+                <button type="button" class="save-price-btn" data-item-id="${item.id}">Save</button>
+              </div>
+            ` : ""}
+          </article>
+        `;
+      }
     )
     .join("");
 
